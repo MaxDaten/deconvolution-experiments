@@ -24,16 +24,7 @@
       perSystem = { config, self', inputs', pkgs, system, ... }:
 
         let
-          jupyterWithBatteries = pkgs.python3.withPackages (ps: with ps; [
-            numpy
-            scipy
-            matplotlib
-            pandas
-            nbdev
-            jupyterlab
-            opencv4
-            pillow
-          ]);
+          jupyterWithBatteries = import ./. { python = pkgs.python3; };
         in
         {
           # Per-system attributes can be defined here. The self' and inputs'
@@ -49,6 +40,7 @@
             languages.nix.enable = true;
             languages.python = {
               enable = true;
+              package = jupyterWithBatteries;
             };
 
             imports = [
@@ -60,7 +52,6 @@
             # https://devenv.sh/reference/options/
             packages = [
               pkgs.nixpkgs-fmt
-              jupyterWithBatteries
               config.packages.default
             ];
 
